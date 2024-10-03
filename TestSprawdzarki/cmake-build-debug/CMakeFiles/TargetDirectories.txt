@@ -1,0 +1,3 @@
+/home/damian/CLionProjects/TestSprawdzarki/cmake-build-debug/CMakeFiles/TestSprawdzarki.dir
+/home/damian/CLionProjects/TestSprawdzarki/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/damian/CLionProjects/TestSprawdzarki/cmake-build-debug/CMakeFiles/rebuild_cache.dir
