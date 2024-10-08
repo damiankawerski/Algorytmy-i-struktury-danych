@@ -1,0 +1,3 @@
+/home/damian/CLionProjects/Algorytmy-i-struktury-danych/BlendaUranowa/cmake-build-debug/CMakeFiles/BlendaUranowa.dir
+/home/damian/CLionProjects/Algorytmy-i-struktury-danych/BlendaUranowa/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/damian/CLionProjects/Algorytmy-i-struktury-danych/BlendaUranowa/cmake-build-debug/CMakeFiles/rebuild_cache.dir
