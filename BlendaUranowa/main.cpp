@@ -3,10 +3,11 @@
 struct WorkerDataNode {
     int C;
     int K;
+    int max_active_days;
 };
 
-int calculateForSingleWorkerInOneSetOfDays(int C, int K, int days) {
-    int active_days = days < (C / K + 1) ? days : C / K + 1; // Ile dni pracownik będzie miał wydajność > 0
+int calculateForSingleWorkerInOneSetOfDays(int C, int K, int asigned_days, int max_active_days) {
+    int active_days = std::min(asigned_days, max_active_days);
     return (active_days * (2 * C - (active_days - 1) * K)) / 2; // Suma wydajności w postaci ciągu arytmetycznego
 }
 
@@ -25,6 +26,7 @@ int main() {
         WorkerDataNode workers[n];
         for (int i = 0; i < n; i++) {
             std::cin >> workers[i].C >> workers[i].K;
+            workers[i].max_active_days = workers[i].C / workers[i].K + 1;
         }
 
         int counter = 0;
@@ -33,7 +35,7 @@ int main() {
             std::cin >> days;
             long sum = 0;
             for (int j = 0; j < n; j++) {
-                sum += calculateForSingleWorkerInOneSetOfDays(workers[j].C, workers[j].K, days);
+                sum += calculateForSingleWorkerInOneSetOfDays(workers[j].C, workers[j].K, days, workers[j].max_active_days);
             }
             std::cout << sum << " ";
             if (sum >= m) {
