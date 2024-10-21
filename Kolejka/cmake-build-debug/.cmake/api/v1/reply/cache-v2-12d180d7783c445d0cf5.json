@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu/cmake-build-debug"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -543,7 +543,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -603,7 +603,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -843,7 +843,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "SejfParadoksu"
+			"value" : "Kolejka"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1142,7 +1142,7 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "SejfParadoksu_BINARY_DIR",
+			"name" : "Kolejka_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -1151,10 +1151,10 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu/cmake-build-debug"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug"
 		},
 		{
-			"name" : "SejfParadoksu_IS_TOP_LEVEL",
+			"name" : "Kolejka_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -1166,7 +1166,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "SejfParadoksu_SOURCE_DIR",
+			"name" : "Kolejka_SOURCE_DIR",
 			"properties" : 
 			[
 				{
@@ -1175,7 +1175,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

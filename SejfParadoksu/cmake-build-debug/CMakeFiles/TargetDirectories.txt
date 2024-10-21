@@ -1,3 +1,0 @@
-/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu/cmake-build-debug/CMakeFiles/SejfParadoksu.dir
-/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/damian/CLionProjects/Algorytmy-i-struktury-danych/SejfParadoksu/cmake-build-debug/CMakeFiles/rebuild_cache.dir
