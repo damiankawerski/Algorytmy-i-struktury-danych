@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/damian/CLionProjects/Kolejka/cmake-build-debug",
-		"source" : "/home/damian/CLionProjects/Kolejka"
+		"build" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug",
+		"source" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka"
 	},
 	"version" : 
 	{

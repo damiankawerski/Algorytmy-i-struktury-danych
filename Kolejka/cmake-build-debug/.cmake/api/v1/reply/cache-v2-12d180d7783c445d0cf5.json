@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/damian/CLionProjects/Kolejka/cmake-build-debug"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -543,7 +543,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/damian/CLionProjects/Kolejka/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -603,7 +603,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/damian/CLionProjects/Kolejka"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1151,7 +1151,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/damian/CLionProjects/Kolejka/cmake-build-debug"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug"
 		},
 		{
 			"name" : "Kolejka_IS_TOP_LEVEL",
@@ -1175,7 +1175,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/damian/CLionProjects/Kolejka"
+			"value" : "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

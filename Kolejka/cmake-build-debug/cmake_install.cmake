@@ -1,4 +1,4 @@
-# Install script for directory: /home/damian/CLionProjects/Kolejka
+# Install script for directory: /home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/damian/CLionProjects/Kolejka/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/damian/CLionProjects/Algorytmy-i-struktury-danych/Kolejka/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
