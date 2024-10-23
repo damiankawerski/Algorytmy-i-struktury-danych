@@ -3,7 +3,7 @@
 using namespace std;
 
 struct client_node {
-    int processing_time;
+    long long processing_time;
     client_node *next;
 };
 
@@ -11,7 +11,7 @@ class fifo_queue {
 private:
     client_node *head;
     client_node *tail;
-    int size;
+    long long size;
 public:
     fifo_queue() {
         head = nullptr;
@@ -23,7 +23,7 @@ public:
         return head == nullptr;
     }
 
-    void add_last(int time_to_process) {
+    void add_last(long long time_to_process) {
         client_node* new_client = new client_node;
         new_client->processing_time = time_to_process;
         new_client->next = nullptr;
@@ -53,7 +53,7 @@ public:
         return head;
     }
 
-    int get_size() const {
+    long long get_size() const {
         return size;
     }
 };
@@ -61,7 +61,7 @@ public:
 class cash_register {
 public:
     fifo_queue queue;
-    int waiting_time;
+    long long waiting_time;
     char flag;
 
     cash_register() {
@@ -73,12 +73,12 @@ public:
         this->flag = flag;
     }
 
-    void add_client(int time_to_process) {
+    void add_client(long long time_to_process) {
         queue.add_last(time_to_process);
         waiting_time += time_to_process;
     }
 
-    int get_size() {
+    long long get_size() {
         return queue.get_size();
     }
 
@@ -86,25 +86,25 @@ public:
         queue.remove_first();
     }
 
-    void process_clients(int time) {
+    void process_clients(long long time) {
         while(time > 0 && !queue.is_empty()) {
+            time--;
+            queue.get_head()->processing_time--;
+            waiting_time--;
             if(queue.get_head()->processing_time <= 0) {
                 queue.remove_first();
                 if (queue.is_empty()) {
                     break;
                 }
             }
-            time--;
-            queue.get_head()->processing_time--;
-            waiting_time--;
         }
     }
 };
 
-int find_shortest_line_by_time(cash_register* registers, int num_registers) {
-    int shortest_line = -1;
-    int shortest_time = INT_MAX;
-    for (int i = 0; i < num_registers; i++) {
+long long find_shortest_line_by_time(cash_register* registers, long long num_registers) {
+    long long shortest_line = -1;
+    long long shortest_time = LLONG_MAX;
+    for (long long i = 0; i < num_registers; i++) {
         if(registers[i].flag == 'o' && registers[i].waiting_time < shortest_time) {
             shortest_time = registers[i].waiting_time;
             shortest_line = i;
@@ -113,45 +113,64 @@ int find_shortest_line_by_time(cash_register* registers, int num_registers) {
     return shortest_line;
 }
 
-void show_results(cash_register registers[], int num_registers) {
-    for (int j = 0; j < num_registers; j++) {
+void show_results(cash_register registers[], long long num_registers) {
+    for (long long j = 0; j < num_registers - 1; j++) {
         if(registers[j].flag == 'z') {
             cout << "K" << j << ": z, ";
         } else if(registers[j].flag == 'o') {
-            cout << "K" << j << ": " << registers[j].get_size() << " clients, " << registers[j].waiting_time << "s, ";
+            cout << "K" << j << ": " << registers[j].get_size() << "o " << registers[j].waiting_time << "s, ";
         }
+    }
+    if(registers[num_registers - 1].flag == 'z') {
+        cout << "K" << num_registers - 1 << ": z";
+    } else if(registers[num_registers - 1].flag == 'o') {
+        cout << "K" << num_registers - 1 << ": " << registers[num_registers - 1].get_size() << "o " << registers[num_registers - 1].waiting_time << "s";
     }
 }
 
 int main() {
-    int simulation_time, num_registers, efficiency, time_to_pay;
+    std::ios_base::sync_with_stdio(false);
+    std::cout.tie(nullptr);
+    std::cin.tie(nullptr);
+    long long simulation_time, num_registers, efficiency, time_to_pay;
     cin >> simulation_time >> num_registers >> efficiency >> time_to_pay;
     cash_register registers[num_registers];
     while(simulation_time > 0) {
         char flag;
         cin >> flag;
         if(flag == 'o') {
-            int index;
+            long long index;
             cin >> index;
             registers[index].set_flag(flag);
         } else if (flag == 'z') {
-            int index;
+            long long index;
             cin >> index;
+            registers[index].set_flag(flag);
+            registers[index].remove_first();
             while(!registers[index].queue.is_empty()) {
-                int shortest_line = find_shortest_line_by_time(registers, num_registers);
+                long long shortest_line = find_shortest_line_by_time(registers, num_registers);
                 registers[shortest_line].add_client(registers[index].queue.get_head()->processing_time);
                 registers[index].remove_first();
+                registers[index].waiting_time = 0;
             }
-            registers[index].set_flag(flag);
         } else if (flag == 'k') {
-            int time, items;
+            long long time, items;
             cin >> time >> items;
-            for(int i = 0; i < num_registers; i++) {
+            if(simulation_time - time < 0) {
+                time = simulation_time;
+                for(long long i = 0; i < num_registers; i++) {
+                    if(registers[i].flag == 'o') {
+                        registers[i].process_clients(time);
+                    }
+                }
+                break;
+            }
+            for(long long i = 0; i < num_registers; i++) {
                 if(registers[i].flag == 'o') {
                     registers[i].process_clients(time);
                 }
             }
-            int shortest_line = find_shortest_line_by_time(registers, num_registers);
+            long long shortest_line = find_shortest_line_by_time(registers, num_registers);
             registers[shortest_line].add_client(items * efficiency + time_to_pay);
             simulation_time -= time;
         }
