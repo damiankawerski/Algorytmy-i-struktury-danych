@@ -1,17 +1,57 @@
 #include <iostream>
-#include <string>
+
 using namespace std;
 
-struct data_node {
-    float frequency;
-    float wavelength;
-    data_node* right;
-    data_node* left;
+struct frequency_node {
+    int counter;
+    int frequency;
+    int wave_length;
+    frequency_node* right;
+    frequency_node* left;
 
-    data_node(float frequency, float wavelength) {
+    frequency_node(int frequency, int wave_length) {
         this->frequency = frequency;
-        this->wavelength = wavelength;
-        right = left = nullptr;
+        this->right = nullptr;
+        this->left = nullptr;
+        this->wave_length = wave_length;
+        this->counter = 1;
+    }
+};
+
+class frequency_bst_tree {
+public:
+    frequency_node* root;
+
+    frequency_bst_tree() {
+        this->root = nullptr;
+    }
+
+    frequency_node* insert(frequency_node* node, int frequency, int wave_length) {
+        if(node == nullptr)
+            return new frequency_node(frequency, wave_length);
+        if(frequency < node->frequency)
+            node->left = insert(node->left, frequency, wave_length);
+        else if(frequency > node->frequency)
+            node->right = insert(node->right, frequency, wave_length);
+        else if (wave_length > node->wave_length) {
+            node->right = insert(node->right, frequency, wave_length);
+        } else if (wave_length < node->wave_length) {
+            node->left = insert(node->left, frequency, wave_length);
+        } else {
+            node->counter++;
+        }
+
+        return node;
+    }
+
+    void in_order(frequency_node* node) {
+        if(node == nullptr)
+            return;
+        in_order(node->left);
+        for(int i = 0; i < node->counter; i++) {
+            cout << "(" << node->frequency << "," << node->wave_length << ") ";
+        }
+        in_order(node->right);
     }
 };
 
@@ -19,125 +59,91 @@ struct year_node {
     int year;
     year_node* right;
     year_node* left;
-    data_node* data_root;
+    frequency_bst_tree* frequency_tree;
 
-    year_node(int year, float frequency, float wavelength) {
+    year_node(int year, int frequency, int wave_length) {
         this->year = year;
-        right = left = nullptr;
-        data_root = new data_node(frequency, wavelength);
+        this->right = nullptr;
+        this->left = nullptr;
+        this->frequency_tree = new frequency_bst_tree();
+        this->frequency_tree->root = this->frequency_tree->insert(this->frequency_tree->root, frequency, wave_length);
     }
 };
 
-
-class bst_tree {
+class year_bst_tree {
 public:
     year_node* root;
 
-    bst_tree() {
-        root = nullptr;
+    year_bst_tree() {
+        this->root = nullptr;
     }
 
-    data_node* insert_data(data_node* node, float frequency, float wavelength) {
-        if (node == nullptr) {
-            return new data_node(frequency, wavelength);
-        }
-
-        if (frequency < node->frequency) {
-            node->left = insert_data(node->left, frequency, wavelength);
-        }
-        else if (frequency > node->frequency) {
-            node->right = insert_data(node->right, frequency, wavelength);
-        } else if (wavelength < node->wavelength) {
-            node->left = insert_data(node->left, frequency, wavelength);
-        } else {
-            node->right = insert_data(node->right, frequency, wavelength);
-        }
-
+    year_node* insert(year_node* node, int year, int frequency, int wave_length) {
+        if(node == nullptr)
+            return new year_node(year, frequency, wave_length);
+        if(year < node->year)
+            node->left = insert(node->left, year, frequency, wave_length);
+        else if(year > node->year)
+            node->right = insert(node->right, year, frequency, wave_length);
+        else
+            node->frequency_tree->root = node->frequency_tree->insert(node->frequency_tree->root, frequency, wave_length);
         return node;
-    }
-
-    year_node* insert(year_node* node, int year, float frequency, float wavelength) {
-        if (node == nullptr) {
-            return new year_node(year, frequency, wavelength);
-        }
-
-        if (year < node->year) {
-            node->left = insert(node->left, year, frequency, wavelength);
-        } else if (year > node->year) {
-            node->right = insert(node->right, year, frequency, wavelength);
-        } else {
-            node->data_root = insert_data(node->data_root, frequency, wavelength);
-        }
-        return node;
-    }
-
-    void in_order_data(data_node* node) {
-        if (node == nullptr) {
-            return;
-        }
-        in_order_data(node->left);
-        cout << "(" << node->frequency << "," << node->wavelength << ") ";
-        in_order_data(node->right);
     }
 
     void in_order(year_node* node) {
-        if (node == nullptr) {
+        if(node == nullptr)
             return;
-        }
         in_order(node->left);
         cout << node->year << ": ";
-        in_order_data(node->data_root);
-        cout << endl;
+        node->frequency_tree->in_order(node->frequency_tree->root);
+        cout << '\n';
         in_order(node->right);
-    }
-
-    void display_tree() {
-        in_order(root);
     }
 };
 
 int main() {
-
     std::ios_base::sync_with_stdio(false);
     std::cout.tie(nullptr);
     std::cin.tie(nullptr);
 
     int time_travels;
+    bool is_ready = true;
+    int years;
+    float frequency, wave_length;
     cin >> time_travels;
+    year_bst_tree* year_tree = new year_bst_tree();
 
-    bool is_engine_working = true;
+    while (time_travels > 0) {
+        time_travels--;
 
-    bst_tree tree;
+        cin >> years >> frequency >> wave_length;
 
-    while (time_travels--) {
-        int year;
-        float frequency, wavelength;
-        cin >> year >> frequency >> wavelength;
+        float sound_speed = frequency * wave_length / 100;
 
-        float sound_speed = frequency * wavelength / 100;
-
-        if(frequency < 20 || frequency > 20000){
+        if((frequency > 20000 || frequency < 20) || (sound_speed < 313 || sound_speed > 350)) {
             continue;
         }
 
-        if(sound_speed < 313 || sound_speed > 350){
+        if(year_tree->root == nullptr) {
+            year_tree->root = year_tree->insert(year_tree->root, years, static_cast<int>(frequency), static_cast<int>(wave_length));
             continue;
         }
 
         if(frequency < 275 || frequency > 325) {
-            is_engine_working = false;
+            is_ready = false;
         }
 
-        tree.root = tree.insert(tree.root, year, frequency, wavelength);
+        year_tree->root = year_tree->insert(year_tree->root, years, static_cast<int>(frequency), static_cast<int>(wave_length));
     }
 
-    tree.display_tree();
-
-    if(is_engine_working){
-        cout << "TAK" << endl;
-    } else {
-        cout << "NIE" << endl;
+    if(year_tree->root == nullptr) {
+        cout << "NIE\n";
+        return 0;
     }
 
+    year_tree->in_order(year_tree->root);
+    string result = is_ready ? "TAK" : "NIE";
+    cout << result << '\n';
+    delete year_tree;
     return 0;
 }
