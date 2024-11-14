@@ -8,6 +8,23 @@ class Graph {
 private:
     vector<vector<int>> adj;
     int vertices;
+
+    bool dfs_cycle(int v, vector<bool>& visited, vector<bool>& rec_stack) {
+        visited[v] = true;
+        rec_stack[v] = true;
+
+        for(int neighbor : adj[v]) {
+            if(!visited[neighbor]) {
+                if(dfs_cycle(neighbor, visited, rec_stack))
+                    return true;
+            }
+            else if(rec_stack[neighbor])
+                return true;
+        }
+
+        rec_stack[v] = false;
+        return false;
+    }
 public:
     Graph(int n) {
         vertices = n;
@@ -23,12 +40,16 @@ public:
     }
 
     bool is_cycle() {
-        for(int i = 0 ; i < vertices ; i++) {
-            if(adj[i].empty()) {
-                return false;
+        vector<bool> visited(vertices, false);
+        vector<bool> rec_stack(vertices, false);
+
+        for(int i = 0; i < vertices; i++) {
+            if(!visited[i]) {
+                if(dfs_cycle(i, visited, rec_stack))
+                    return true;
             }
         }
-        return true;
+        return false;
     }
 
     void sort_adj() {
