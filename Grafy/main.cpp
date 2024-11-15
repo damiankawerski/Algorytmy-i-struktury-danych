@@ -39,16 +39,14 @@ public:
         adj[u].push_back(v);
     }
 
-    bool is_cycle() {
+    bool is_cycle(int start) {
         vector<bool> visited(vertices, false);
         vector<bool> rec_stack(vertices, false);
 
-        for(int i = 0; i < vertices; i++) {
-            if(!visited[i]) {
-                if(dfs_cycle(i, visited, rec_stack))
-                    return true;
-            }
-        }
+        if(dfs_cycle(start, visited, rec_stack))
+                return true;
+
+
         return false;
     }
 
@@ -120,7 +118,7 @@ int main() {
 
         cout << "\n";
         // jeśli ścieżka jest pusta i istnieje cykl
-        if(path.empty() && graph.is_cycle()) {
+        if(path.empty() && graph.is_cycle(start)) {
             cout << "PETLA\n";
             continue;
         }
