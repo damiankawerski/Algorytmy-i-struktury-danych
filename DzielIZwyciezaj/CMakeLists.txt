@@ -3,4 +3,4 @@ project(DzielIZwyciezaj)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(DzielIZwyciezaj main.cpp Testing.cpp)
+add_executable(DzielIZwyciezaj main.cpp)

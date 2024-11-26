@@ -1,81 +1,90 @@
-
-#include "Testing.h"
-
-
 #include <iostream>
+using namespace std;
 
+long long arr[10] = {-1300, -893, -86, 4, 6, 79, 102, 745, 1945, 2345};
+long long arr2[5] = {-101, -100, 17, 1900, 2400};
+long long pos = 3;
+long long *arr_ptr = arr;
+int sizet = 10;
 
-int search(int start_value) {
-    int jump = 1;
-    long long current_value = start_value;
-    long long high = start_value;
-    long long low = start_value;
-    int jump_to_high = 0;
-    int jump_to_low = 0;
-    int temp_jump;
-
-    // ile trzeba skoków żeby przekroczyło
-    while(current_value > start_value) {
-        current_value = time_jump(jump);
-        jump *= 2;
+void next_test() {
+    if(arr_ptr == arr) {
+        arr_ptr = arr2;
+        pos = 1;
+        sizet = 5;
+    } else {
+        arr_ptr = arr;
+        pos = 3;
+        sizet = 10;
     }
-
-    jump_to_high = jump;
-    jump = 1;
-
-    // szukamy dokładnej ilości skoków do ostatniego elementu
-    while(true) {
-        temp_jump = jump_to_high - jump;
-        current_value = time_jump(temp_jump);
-        jump *= 2;
-        if(time_jump(temp_jump + 1) < start_value && current_value > start_value) {
-            high = current_value;
-            jump_to_high = temp_jump;
-            low = time_jump(temp_jump + 1);
-            break;
-        }
-    }
-
-    jump = 1;
-
-    // szukamy ile trzeba skoków żeby przekroczyło start_value
-    current_value = low;
-    while(current_value < start_value) {
-        current_value = time_jump(jump_to_high + jump + 1);
-        jump *= 2;
-    }
-
-    jump_to_low = jump;
-    jump = 1;
-
-
-    // szukamy dokładnej ilości skoków żeby dosięgneło start_value
-    while(true) {
-        temp_jump = jump_to_low - jump;
-        current_value = time_jump(jump_to_high + temp_jump + 1);
-        jump *= 2;
-        if(time_jump(jump_to_high + temp_jump + 1) == start_value) {
-            low = current_value;
-            jump_to_low = temp_jump;
-            break;
-        }
-    }
-
-    return jump_to_high + jump_to_low + 1;
 }
 
+int time_jump(unsigned int x) {
+    pos = (pos + x) % sizet;
+    return arr_ptr[pos];
+}
+
+// działa
+long long search(int high, int low) {
+    for(int i = low ; i < high ; i++) {
+        int current = time_jump(0);
+        int next = time_jump(i);
+        if(current == next) {
+            return i;
+        }
+    }
+    return 0;
+}
+
+// {-1300, -893, -86, 4, 6, 79, 102, 745, 1945, 2345}
+//{-101, -100, 17, 1900, 2400}
+
+// tutaj powinenm szukac cyklu a NIE DZIAŁA
+void get_compartment(long long &high, long long &low) {
+    int current = time_jump(0);
+    int prev;
+    char loop = 'w';
+    int jump = 1;
+
+    do {
+        prev = current;
+        current = time_jump(jump);
+
+
+        if (prev > current && loop == 'g') {
+            high = jump;
+            low = jump / 2;
+            loop = 'b';
+        }
+
+        if (prev > current && loop == 'w') {
+            loop = 'g';
+        }
+
+        jump *= 2;
+    } while (loop != 'b');
+}
+
+//long long binary_search() {
+//
+//}
+
+
 int main() {
-    int tests;
-    std::cin >> tests;
-    std::cout << "\n";
 
-    while(tests--) {
+    int T;
+    cin >> T;
 
-        long long result = search(time_jump(0));
-        testing->answer_check(result);
+    cout << "\n";
 
+    long long high, low;
+
+    for(int i = 0; i < T; i++) {
+        get_compartment(high, low);
+        cout << search(high, low) << " ";
         next_test();
     }
 
     return 0;
+
 }
