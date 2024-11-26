@@ -52,12 +52,16 @@ bool Testing::answer_check(int answer) {
     return false;
 }
 
-long long Testing::time_jump(unsigned int x) {
+long long Testing::jump(unsigned int x) {
     current_index = (current_index + x) % size;
     return arr[current_index];
 }
 
 Testing *testing = new Testing();
+
+long long time_jump(unsigned int x) {
+    return testing->jump(x);
+}
 
 void next_test() {
     delete testing;

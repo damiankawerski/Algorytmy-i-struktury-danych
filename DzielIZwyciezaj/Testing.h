@@ -12,7 +12,7 @@ class Testing {
         long long size;
         long long current_index;
 
-        void fill();
+    void fill();
 
         public:
         Testing();
@@ -20,10 +20,12 @@ class Testing {
 
         void print();
         bool answer_check(int answer);
-        long long time_jump(unsigned int x);
+
+        long long jump(unsigned int x);
 };
 
 void next_test();
+long long time_jump(unsigned int x);
 
 extern Testing *testing;
 
