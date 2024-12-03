@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void fill_dynamic_table(vector<vector<int>> &arr, vector<vector<int>> &dp, int N, bool &one_in_corner) {
+void fill_dynamic_table_from_top(vector<vector<int>> &arr, vector<vector<int>> &dp, int N) {
     dp[0][0] = arr[0][0];
     for (int i = 1; i < N; ++i) {
         dp[i][0] = dp[i-1][0] + arr[i][0];
@@ -16,19 +16,24 @@ void fill_dynamic_table(vector<vector<int>> &arr, vector<vector<int>> &dp, int N
             dp[i][j] = max(dp[i-1][j], dp[i][j-1]) + arr[i][j];
         }
     }
-
-    if(dp[N - 1][N - 1] > dp[N - 2][N - 1] && dp[N - 1][N - 1] > dp[N - 1][N - 2]) {
-        one_in_corner = true;
-    } else {
-        one_in_corner = false;
-    }
 }
 
-void take_down_ones(vector<vector<int>> &arr, vector<vector<int>> &dp, int N, bool one_in_corner) {
-    if(one_in_corner) {
-        arr[0][0] = 0;
-    }
+//void fill_dynamic_table_from_bottom(vector<vector<int>> &arr, vector<vector<int>> &dp, int N) {
+//    int end = N - 1;
+//    dp[end][end] = arr[end][end];
+//    for (int i = end - 1; i >= 0; --i) {
+//        dp[i][end] = dp[i + 1][end] + arr[i][end];
+//        dp[end][i] = dp[end][i + 1] + arr[end][i];
+//    }
+//
+//    for (int i = end - 1; i >= 0; --i) {
+//        for (int j = end - 1; j >= 0; --j) {
+//            dp[i][j] = max(dp[i+1][j], dp[i][j+1]) + arr[i][j];
+//        }
+//    }
+//}
 
+void take_down_ones(vector<vector<int>> &arr, vector<vector<int>> &dp, int N) {
     int i = N - 1;
     int j = N - 1;
 
@@ -36,7 +41,6 @@ void take_down_ones(vector<vector<int>> &arr, vector<vector<int>> &dp, int N, bo
         arr[i][j] = 0;
 
         if(i > 0 && j > 0) {
-            // Wybieramy kierunek, skąd przyszliśmy
             if(dp[i-1][j] > dp[i][j-1]) {
                 i--;
             } else {
@@ -49,12 +53,8 @@ void take_down_ones(vector<vector<int>> &arr, vector<vector<int>> &dp, int N, bo
         }
     }
 
-    // Zerowanie pozostałych elementów, jeśli jeden z indeksów doszedł do zera
-    if(i == 0) {
-        for(int k = 0; k <= j; k++) {
-            arr[i][k] = 0;
-        }
-    }
+    // Zerowanie pierwszego elementu, jeśli nie zostało wcześniej wyzerowane
+    arr[0][0] = 0;
 }
 
 void print_matrix(vector<vector<int>> &arr, int N) {
@@ -65,6 +65,8 @@ void print_matrix(vector<vector<int>> &arr, int N) {
         cout << endl;
     }
 }
+
+
 
 int main() {
     std::ios_base::sync_with_stdio(false);
@@ -81,16 +83,16 @@ int main() {
             macierz[i][j] = temp;
         }
     }
-    bool one_in_corner;
-
 
     vector<vector<int>> dp(N, vector<int>(N, 0));
-    fill_dynamic_table(macierz, dp, N, one_in_corner);
-    take_down_ones(macierz, dp, N, one_in_corner);
+    fill_dynamic_table_from_top(macierz, dp, N);
+    take_down_ones(macierz, dp, N);
+    // print_matrix(dp, N);
     int result = dp[N - 1][N - 1];
-    fill_dynamic_table(macierz, dp, N, one_in_corner);
+    fill_dynamic_table_from_top(macierz, dp, N);
     result += dp[N - 1][N - 1];
     cout << result << endl;
+    // print_matrix(dp, N);
 
 
     return 0;
