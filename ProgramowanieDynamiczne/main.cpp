@@ -1,66 +1,94 @@
 #include <iostream>
-#include <vector>
-using namespace std;
+#include <cstdio>
+#include <cmath>
 
-void fill_dynamic_table_from_top(vector<vector<int>> &arr, vector<vector<int>> &dp, int N) {
-    dp[0][0] = arr[0][0];
-    for (int i = 1; i < N; ++i) {
-        dp[i][0] = dp[i-1][0] + arr[i][0];
-        dp[0][i] = dp[0][i-1] + arr[0][i];
-    }
-
-    for (int i = 1; i < N; ++i) {
-        for (int j = 1; j < N; ++j) {
-            dp[i][j] = max(dp[i-1][j], dp[i][j-1]) + arr[i][j];
-        }
-    }
+// Funkcja do zamiany wartości
+void swap(double& a, double& b) {
+    double temp = a;
+    a = b;
+    b = temp;
 }
 
-void take_down_ones(vector<vector<int>> &arr, vector<vector<int>> &dp, int N) {
-    int i = N - 1;
-    int j = N - 1;
+// Implementacja algorytmu CountingSort dla liczb zmiennoprzecinkowych
+void countingSort(double* arr, int n) {
+    // Znajdź zakres wartości
+    double minVal = arr[0], maxVal = arr[0];
+    for (int i = 1; i < n; i++) {
+        minVal = std::min(minVal, arr[i]);
+        maxVal = std::max(maxVal, arr[i]);
+    }
 
-    while(i > 0 || j > 0) {
-        arr[i][j] = 0;
+    // Oblicz zakres i przesunięcie
+    double range = maxVal - minVal;
 
-        if(i > 0 && j > 0) {
-            if(dp[i-1][j] < dp[i][j-1]) {
-                j--;
-            } else {
-                i--;
+    // Jeśli wszystkie wartości są takie same, nie ma potrzeby sortowania
+    if (range == 0) return;
+
+    // Alokacja pamięci dla bucket'ów
+    int bucketCount = std::min(n, 10000);
+    double* buckets = new double[bucketCount]();
+    int* bucketSizes = new int[bucketCount]();
+
+    // Rozłóż elementy do bucket'ów
+    for (int i = 0; i < n; i++) {
+        int bucketIndex = static_cast<int>((arr[i] - minVal) / range * (bucketCount - 1));
+        buckets[bucketIndex * n + bucketSizes[bucketIndex]] = arr[i];
+        bucketSizes[bucketIndex]++;
+    }
+
+    // Sortowanie każdego bucket'a (np. insertion sort)
+    for (int i = 0; i < bucketCount; i++) {
+        for (int j = 1; j < bucketSizes[i]; j++) {
+            double key = buckets[i * n + j];
+            int k = j - 1;
+            while (k >= 0 && buckets[i * n + k] > key) {
+                buckets[i * n + k + 1] = buckets[i * n + k];
+                k--;
             }
-        } else if(i > 0) {
-            i--;
-        } else {
-            j--;
+            buckets[i * n + k + 1] = key;
         }
     }
-    arr[0][0] = 0;
+
+    // Kopiowanie posortowanych elementów z powrotem do oryginalnej tablicy
+    int index = 0;
+    for (int i = 0; i < bucketCount; i++) {
+        for (int j = 0; j < bucketSizes[i]; j++) {
+            arr[index++] = buckets[i * n + j];
+        }
+    }
+
+    // Zwolnienie pamięci
+    delete[] buckets;
+    delete[] bucketSizes;
 }
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cout.tie(nullptr);
-    std::cin.tie(nullptr);
-    int N;
-    cin >> N;
+    // Wczytanie liczby słupków
+    int n;
+    std::scanf("%d", &n);
 
-    vector<vector<int>> macierz(N, vector<int>(N));
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            int temp;
-            cin >> temp;
-            macierz[i][j] = temp;
-        }
+    // Tablica do przechowywania pozycji słupków
+    double* pozycje = new double[n];
+
+    // Wczytanie pozycji słupków
+    for (int i = 0; i < n; i++) {
+        std::scanf("%lf", &pozycje[i]);
     }
 
-    vector<vector<int>> dp(N, vector<int>(N, 0));
-    fill_dynamic_table_from_top(macierz, dp, N);
-    take_down_ones(macierz, dp, N);
-    int result = dp[N - 1][N - 1];
-    fill_dynamic_table_from_top(macierz, dp, N);
-    result += dp[N - 1][N - 1];
-    cout << result << endl;
+    // Sortowanie liniowe (Bucket Sort)
+    countingSort(pozycje, n);
+
+    // Obliczenie maksymalnej długości przęsła
+    double maxPrzesl = 0.0;
+    for (int i = 1; i < n; i++) {
+        maxPrzesl = std::max(maxPrzesl, std::abs(pozycje[i] - pozycje[i-1]));
+    }
+
+    // Wypisanie wyniku z dokładnością do 4 miejsc po przecinku
+    printf("%.4f\n", maxPrzesl);
+
+    // Zwolnienie pamięci
+    delete[] pozycje;
 
     return 0;
 }
