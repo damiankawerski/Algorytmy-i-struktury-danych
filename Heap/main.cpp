@@ -3,8 +3,6 @@
 
 using namespace std;
 
-
-
 class Heap {
 private:
     vector<int> heap;
@@ -14,7 +12,7 @@ private:
     void heap_up(int index) {
         while (index > 0) {
             int parent = (index - 1) / 2;
-            if ((is_min_heap && heap[index] < heap[parent]) || (!is_min_heap && heap[index] > heap[parent])) {
+            if ((is_min_heap && heap[index] < heap[parent]) || (!is_min_heap && heap[index] > heap[parent])) { // minimalny || maksymalny kopiec - po prostu wstawiamy w tablicy jak w sorted_array
                 swap(heap[index], heap[parent]);
                 index = parent;
             } else {
@@ -53,6 +51,7 @@ public:
         this->is_min_heap = is_min_heap;
     }
 
+    // Dajemy size - 1 bo ostatni element jest dodany
     void insert(int value) {
         heap.push_back(value);
         heap_up(heap.size() - 1);
@@ -77,10 +76,6 @@ public:
         heap[0] += new_val;
 
         heap_down(0);
-    }
-
-    size_t get_size() {
-        return heap.size();
     }
 
     int extract_root() {
