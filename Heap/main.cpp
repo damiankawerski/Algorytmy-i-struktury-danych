@@ -98,7 +98,7 @@ public:
 int calculate_tax(Heap& min_heap, Heap& max_heap) {
     int tax = 0;
 
-    while(!min_heap.is_empty()) {
+    while(!max_heap.is_empty() && !min_heap.is_empty()) {
         int min_val = min_heap.extract_root();
         int max_val = max_heap.extract_root();
 
@@ -131,11 +131,14 @@ int main() {
                 max_heap.insert(value);
                 cin >> value;
                 min_heap.insert(value);
-            } else if(action == 'p' && !max_heap.is_empty()) {
+            }
+            if(action == 'p' && !max_heap.is_empty()) {
                 cin >> value;
                 if(max_heap.get_root() + value > 0) {
                     max_heap.change_max_val(value);
                 }
+            } else if (action == 'p' && max_heap.is_empty()) {
+                cin >> value;
             }
         }
 //        cout << "Min heap: ";
