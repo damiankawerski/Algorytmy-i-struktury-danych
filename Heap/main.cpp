@@ -24,7 +24,7 @@ private:
     // Ta funkcja służy do przywracania własności kopca w przypadku USUNIECIA ELEMENTU - extract i change_max_val
     void heap_down(int index) {
         int size = heap.size();
-        while (true) {
+        while (index < size) {
             int root = index;
             int left = 2 * index + 1;
             int right = 2 * index + 2;
