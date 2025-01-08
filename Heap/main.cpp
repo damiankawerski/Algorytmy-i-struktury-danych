@@ -9,7 +9,8 @@ private:
     bool is_min_heap;
 
     // ta funkcja przywraca własności kopca w przypadku DODANIA ELEMENTU - instert
-    void heap_up(int index) {
+    void heap_up() {
+        int index = heap.size() - 1;
         while (index > 0) {
             int parent = (index - 1) / 2;
             if ((is_min_heap && heap[index] < heap[parent]) || (!is_min_heap && heap[index] > heap[parent])) { // minimalny || maksymalny kopiec - po prostu wstawiamy w tablicy jak w sorted_array
@@ -54,7 +55,7 @@ public:
     // Dajemy size - 1 bo ostatni element jest dodany
     void insert(int value) {
         heap.push_back(value);
-        heap_up(heap.size() - 1);
+        heap_up();
     }
 
     void print() {
