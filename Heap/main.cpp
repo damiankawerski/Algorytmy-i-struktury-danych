@@ -109,6 +109,9 @@ int calculate_tax(Heap& min_heap, Heap& max_heap) {
 }
 
 int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cout.tie(nullptr);
+    std::cin.tie(nullptr);
     int clients;
     cin >> clients;
 
