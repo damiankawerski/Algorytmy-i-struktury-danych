@@ -1,81 +1,101 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
 
-void calculate_prime_factors(vector<int>& prime_factors_count, int max_number) {
-    prime_factors_count.assign(max_number + 1, 0);
-    for (int i = 2; i <= max_number; ++i) {
-        if (prime_factors_count[i] == 0) { // i jest liczbą pierwszą
-            for (int j = i; j <= max_number; j += i) {
-                prime_factors_count[j]++;
-            }
-        }
+// Sprawdza czy jest liczba pierwsza
+bool is_prime(int n) {
+    if (n < 2) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+    for (int i = 3; i <= sqrt(n); i += 2) {
+        if (n % i == 0) return false;
     }
+    return true;
 }
 
+// Sprawdza czy liczba ma parzystą ilość czynników pierwszych
+bool even_prime_factors(int n) {
+    int counter = 0;
+    for(int i = 2 ; i <= n ; i++) {
+        if(n % i == 0 && is_prime(i)) {
+            counter++;
+        }
+    }
+    return counter % 2 == 0;
+}
 
-int quickselect(vector<int>& arr, int left, int right, int k) {
-    if (left == right) return arr[left];
+// Podziel
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
 
-    int pivot = arr[right];
-    int i = left;
-    for (int j = left; j < right; ++j) {
-        if (arr[j] < pivot) {
-            swap(arr[i], arr[j]);
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
             i++;
+            swap(arr[i], arr[j]);
         }
     }
-    swap(arr[i], arr[right]);
-
-    int count = i - left + 1;
-    if (k == count - 1) return arr[i];
-    else if (k < count - 1) return quickselect(arr, left, i - 1, k);
-    else return quickselect(arr, i + 1, right, k - count);
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
 }
 
+
+// Wybierz k-ty element
+int quick_select(vector<int>& arr, int low, int high, int k) {
+    if (low == high) {
+        return arr[low];
+    }
+
+    int pivot_i = partition(arr, low, high);
+
+    if (pivot_i == k) {
+        return arr[pivot_i];
+    } else if (k < pivot_i) {
+        return quick_select(arr, low, pivot_i - 1, k);
+    } else {
+        return quick_select(arr, pivot_i + 1, high, k);
+    }
+}
+
+void print_vector(vector<int> arr) {
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+    std::ios_base::sync_with_stdio(false);
+    std::cout.tie(nullptr);
+    std::cin.tie(nullptr);
     int t;
     cin >> t;
 
     while (t--) {
-        int n, k;
+        int n;
         cin >> n;
-
-        vector<int> arr(n);
-        int max_number = 0;
-        for (int i = 0; i < n; ++i) {
-            cin >> arr[i];
-            max_number = max(max_number, arr[i]);
-        }
-        cin >> k;
-
-        // Obliczenie liczby unikalnych dzielników pierwszych tylko do max_number
-        vector<int> prime_factors_count;
-        calculate_prime_factors(prime_factors_count, max_number);
-
-        // Filtracja liczb korzystnych
         vector<int> stable_numbers;
-        for (int num : arr) {
-            if (prime_factors_count[num] % 2 == 0) {
-                stable_numbers.push_back(num);
+        for (int i = 0;  i < n ; i++) {
+            int temp;
+            cin >> temp;
+            if(even_prime_factors(temp)) {
+                stable_numbers.push_back(temp);
             }
         }
+        int k;
+        cin >> k;
 
-        if (stable_numbers.size() <= k) {
+        if (k >= stable_numbers.size()) {
             cout << "BRAK DANYCH\n";
-        } else {
-            // Znalezienie k-tego najmniejszego elementu
-            int result = quickselect(stable_numbers, 0, stable_numbers.size() - 1, k);
-            cout << result << "\n";
+            continue;
         }
-    }
 
-    return 0;
+        //print_vector(stable_numbers);
+
+        cout << quick_select(stable_numbers, 0, stable_numbers.size() - 1, k) << endl;
+    }
 }
