@@ -1,15 +1,16 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
+int MAX_VAL = 1000000;
 
-void calculate_prime_factors(vector<int>& prime_factors_count, int max_number) {
-    prime_factors_count.assign(max_number + 1, 0);
-    for (int i = 2; i <= max_number; ++i) {
-        if (prime_factors_count[i] == 0) { // i jest liczbą pierwszą
-            for (int j = i; j <= max_number; j += i) {
+void calculate_prime_factors(vector<int>& prime_factors_count) {
+    for (int i = 2; i <= MAX_VAL; ++i) {
+        if (prime_factors_count[i] == 0) {
+            for (int j = i; j <= MAX_VAL; j += i) {
                 prime_factors_count[j]++;
             }
         }
@@ -17,65 +18,76 @@ void calculate_prime_factors(vector<int>& prime_factors_count, int max_number) {
 }
 
 
-int quickselect(vector<int>& arr, int left, int right, int k) {
-    if (left == right) return arr[left];
+// Wybierz k-ty element
+int quick_select(vector<int> arr, int k) {
+    if (arr.size() == 1) {
+        return arr[0];
+    }
 
-    int pivot = arr[right];
-    int i = left;
-    for (int j = left; j < right; ++j) {
-        if (arr[j] < pivot) {
-            swap(arr[i], arr[j]);
-            i++;
+    int pivot = arr[arr.size() / 2];
+    vector<int> left, middle, right;
+
+    for (int num : arr) {
+        if (num < pivot) {
+            left.push_back(num);
+        } else if (num > pivot) {
+            right.push_back(num);
+        } else {
+            middle.push_back(num);
         }
     }
-    swap(arr[i], arr[right]);
 
-    int count = i - left + 1;
-    if (k == count - 1) return arr[i];
-    else if (k < count - 1) return quickselect(arr, left, i - 1, k);
-    else return quickselect(arr, i + 1, right, k - count);
+    int left_size = left.size();
+
+    if (k < left_size) {
+        return quick_select(left, k);
+    } else if (k < left_size + middle.size()) {
+        return pivot;
+    } else {
+        return quick_select(right, k - left_size - middle.size());
+    }
 }
 
+void print_vector(vector<int> arr) {
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+    std::ios_base::sync_with_stdio(false);
+    std::cout.tie(nullptr);
+    std::cin.tie(nullptr);
     int t;
     cin >> t;
 
+    vector<int> prime_factors_count(MAX_VAL, 0);
+    calculate_prime_factors(prime_factors_count);
+
     while (t--) {
-        int n, k;
+        int n;
         cin >> n;
-
-        vector<int> arr(n);
         int max_number = 0;
-        for (int i = 0; i < n; ++i) {
-            cin >> arr[i];
-            max_number = max(max_number, arr[i]);
-        }
-        cin >> k;
 
-        // Obliczenie liczby unikalnych dzielników pierwszych tylko do max_number
-        vector<int> prime_factors_count;
-        calculate_prime_factors(prime_factors_count, max_number);
-
-        // Filtracja liczb korzystnych
         vector<int> stable_numbers;
-        for (int num : arr) {
-            if (prime_factors_count[num] % 2 == 0) {
-                stable_numbers.push_back(num);
+
+        for (int i = 0;  i < n ; i++) {
+            int temp;
+            cin >> temp;
+            if(prime_factors_count[temp] % 2 == 0) {
+                stable_numbers.push_back(temp);
             }
         }
 
-        if (stable_numbers.size() <= k) {
-            cout << "BRAK DANYCH\n";
-        } else {
-            // Znalezienie k-tego najmniejszego elementu
-            int result = quickselect(stable_numbers, 0, stable_numbers.size() - 1, k);
-            cout << result << "\n";
-        }
-    }
+        int k;
+        cin >> k;
 
-    return 0;
+        if (k >= stable_numbers.size()) {
+            cout << "BRAK DANYCH\n";
+            continue;
+        }
+
+        cout << quick_select(stable_numbers, k) << '\n';
+    }
 }
